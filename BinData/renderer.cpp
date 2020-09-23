@@ -46,7 +46,7 @@ static int load_binary(FileData* fd, GLint mem_size, const char* fname)
         fclose(file);
         return -1;
     }
-    const GLint padding = size % 3;
+    const GLint padding = 3 - (size % 3);
     const GLint padded_size = size + padding;
     fd->data->reserve(padded_size);
     fd->file_3d_size = padded_size / 3;
