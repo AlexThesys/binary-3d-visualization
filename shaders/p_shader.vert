@@ -5,7 +5,10 @@ layout (location=0) in vec3 pos;
 
 uniform mat4 VP;
 
+out vec3 pPos;
+
 void main()
 {
     gl_Position = VP * vec4(pos, 1.0f);
+    pPos = abs(pos);
 }
