@@ -12,10 +12,10 @@
 
 #define MIN(x,y) (x) < (y) ? (x) : (y)
 
-static constexpr int64_t block_update_speed = 10; // maybe make configurable
+static constexpr int64_t block_update_speed = 25; // ms
 static constexpr size_t kmax_block_size = 0x100 << 12; // experimental value
 static constexpr GLfloat rotation_speed = 0.008f; // maybe make configurable
-static constexpr GLint data_update_speed = 0x1000;
+static constexpr GLint data_update_speed = 0x1000; // bytes / block_update_speed
 
 static GLint queryMemoryAvailable()
 {
@@ -142,7 +142,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
         static std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
         std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
         std::chrono::steady_clock::duration d = current_time - last_time;
-        auto delta = std::chrono::duration_cast<std::chrono::microseconds>(d).count();
+        auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(d).count();
 
         // rotate view
         view = glm::rotate(view, (float)glfwGetTime() * glm::radians(rotation_speed), glm::vec3(0.5f, 1.0f, 0.0f));
