@@ -21,7 +21,7 @@ struct FileData
     GLint file_3d_size, block_3d_size;
 };
 
-void initGL(GraphicsData* gd, FileData* fd, const char* filename);
+void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coor_system);
 void renderGL(GraphicsData* gd, FileData* fd);
 void cleanupGL(GraphicsData* gd);
 
