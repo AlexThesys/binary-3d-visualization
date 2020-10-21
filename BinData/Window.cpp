@@ -76,6 +76,19 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
+	if (key == GLFW_KEY_A && action == GLFW_PRESS)
+		if (theWindow->rotation_speed > 2.0f)
+			theWindow->rotation_speed -= 2.0f;
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+		if (theWindow->rotation_speed < 20.0f)
+			theWindow->rotation_speed += 2.0f;
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+		if (theWindow->data_update_rate > 0x100)
+			theWindow->data_update_rate >>= 1;
+	if (key == GLFW_KEY_X && action == GLFW_PRESS)
+		if (theWindow->data_update_rate < 0x4000)
+			theWindow->data_update_rate <<= 1;
+
 	if (key >= 0 && key < 1024) {
 		if (action == GLFW_PRESS)
 			theWindow->keys[key] = true;

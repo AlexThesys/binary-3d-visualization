@@ -9,6 +9,8 @@ enum coordinate_system {
 
 int main(int argc, char** argv)
 {
+	puts("Press 'a' or 's' keys to change rotation speed...");
+	puts("Press 'z' or 'x' keys to change data update rate...");
 	if (argc < 2) {
 		puts("Provide the filename!");
 		puts("Also if you want to use spherical coordinates instead of cartesian add '-s'!");
@@ -23,7 +25,7 @@ int main(int argc, char** argv)
 	std::unique_ptr<GraphicsData> gdata = std::make_unique<GraphicsData>();
 	std::vector<GLfloat> bin_data;
 	FileData fdata = {&bin_data, 0, 0};
-	initGL(gdata.get(), &fdata, argv[1], coord_system, false);
+	initGL(gdata.get(), &fdata, argv[1], coord_system, true);
 	renderGL(gdata.get(), &fdata);
 	cleanupGL(gdata.get());
 

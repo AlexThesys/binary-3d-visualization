@@ -15,25 +15,27 @@ private:
 	bool keys[1024];  //ASCI keys
 	glm::vec2 lastMousePos;
 	GLfloat cam_yaw, cam_pitch, cam_radius, zoomChange;  //mouse coordinates
+	GLfloat rotation_speed = 4.0f;
+	GLint data_update_rate = 0x1000;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
     static void glfw_onFrameBufferSize(GLFWwindow * window, int width, int height);
 public:
-	
 	Window(GLint w = 1920, GLint h = 1080);
 	~Window();
-	int initialise(bool wFullScreen = false);
+	int initialise(bool wFullScreen = true);
 	GLFWwindow *getWindow() { return mainWindow; }
 	bool getShouldClose(){ return glfwWindowShouldClose(mainWindow); }
 	void swapBuffers(){ glfwSwapBuffers(mainWindow); }
 	GLint getBufferWidth() { return bufferWidth; }
 	GLint getBufferHeight() { return bufferHeight; }
-
 	bool *getKeys() { return keys; }
 	GLfloat get_cam_yaw() const { return cam_yaw; }
 	GLfloat get_cam_pitch() const { return cam_pitch; }
 	GLfloat get_cam_radius() const { return cam_radius; }
 	GLfloat getZoomChange();
+	GLfloat get_rotation_speed() const { return rotation_speed; }
+	GLint get_data_update_rate() const { return data_update_rate; }
 };
 
 inline Window::~Window() {

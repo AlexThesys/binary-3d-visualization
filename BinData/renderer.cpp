@@ -14,8 +14,6 @@
 
 static constexpr int64_t block_update_speed = 25; // ms
 static constexpr size_t kmax_block_size = 0x100 << 12; // experimental value
-static constexpr GLfloat rotation_speed = 4.0f; // maybe make configurable
-static constexpr GLint data_update_speed = 0x1000; // bytes / block_update_speed
 extern const char* APP_TITLE;
 
 static void showFPS(GLFWwindow* window);
@@ -156,7 +154,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
         gd->camera.setRadius(gd->window.get_cam_radius());
         view = gd->camera.getViewMatrix();
         // rotate view
-        view = glm::rotate(view, glm::radians((float)glfwGetTime() * rotation_speed), glm::vec3(0.5f, 1.0f, 0.0f));
+        view = glm::rotate(view, glm::radians((float)glfwGetTime() * gd->window.get_rotation_speed()), glm::vec3(0.5f, 1.0f, 0.0f));
 
         projection = glm::perspective(glm::radians(45.0f),
             (GLfloat)gd->window.getBufferWidth() / (GLfloat)gd->window.getBufferHeight(), 0.1f, 100.0f);
@@ -176,7 +174,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
                 offset = 0;
             }
             else {
-                offset += data_update_speed;
+                offset += gd->window.get_data_update_rate();
             }
         }
         gd->pShader.useProgram();
