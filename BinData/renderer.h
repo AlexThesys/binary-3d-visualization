@@ -23,7 +23,7 @@ struct FileData
     GLint file_3d_size, block_3d_size;
 };
 
-void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coor_system, bool full_screen);
+void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_screen);
 void renderGL(GraphicsData* gd, FileData* fd);
 void cleanupGL(GraphicsData* gd);
 

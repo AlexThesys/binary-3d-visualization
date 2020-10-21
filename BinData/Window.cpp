@@ -89,6 +89,13 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 		if (theWindow->data_update_rate < 0x4000)
 			theWindow->data_update_rate <<= 1;
 
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+		theWindow->coord_system = cs_cartesian;
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+		theWindow->coord_system = cs_spherical;
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+		theWindow->coord_system = cs_cylindrical;
+
 	if (key >= 0 && key < 1024) {
 		if (action == GLFW_PRESS)
 			theWindow->keys[key] = true;

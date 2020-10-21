@@ -1,31 +1,19 @@
 #include <memory>
 #include "renderer.h"
 
-enum coordinate_system {
-	cs_cartesian = 0,
-	cs_spherical,
-	cs_cylindrical
-};
-
 int main(int argc, char** argv)
 {
 	puts("Press 'a' or 's' keys to change rotation speed...");
 	puts("Press 'z' or 'x' keys to change data update rate...");
+	puts("Press 'q', 'w' or 'e' to select cartesian, spherical or cylindrical coordinate system...");
 	if (argc < 2) {
 		puts("Provide the filename!");
-		puts("Also if you want to use spherical coordinates instead of cartesian add '-s'!");
-		puts("Or if you want to use cylindical coordinates add '-c'!");
 		return -1;
-	}
-	GLint coord_system = cs_cartesian; 
-	if (argc > 2) {
-		if (argv[2][1] == 's') coord_system = cs_spherical;
-		if (argv[2][1] == 'c') coord_system = cs_cylindrical;
 	}
 	std::unique_ptr<GraphicsData> gdata = std::make_unique<GraphicsData>();
 	std::vector<GLfloat> bin_data;
 	FileData fdata = {&bin_data, 0, 0};
-	initGL(gdata.get(), &fdata, argv[1], coord_system, true);
+	initGL(gdata.get(), &fdata, argv[1], true);
 	renderGL(gdata.get(), &fdata);
 	cleanupGL(gdata.get());
 

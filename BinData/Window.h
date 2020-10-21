@@ -7,6 +7,11 @@
 
 class Window {
 private:
+	enum coordinate_system {
+		cs_cartesian = 0,
+		cs_spherical,
+		cs_cylindrical
+	};
 	GLFWwindow *mainWindow;
 	GLint width, height;
 	GLint bufferWidth, bufferHeight;
@@ -17,6 +22,7 @@ private:
 	GLfloat cam_yaw, cam_pitch, cam_radius, zoomChange;  //mouse coordinates
 	GLfloat rotation_speed = 4.0f;
 	GLint data_update_rate = 0x1000;
+	GLint coord_system = cs_cartesian;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
     static void glfw_onFrameBufferSize(GLFWwindow * window, int width, int height);
@@ -36,6 +42,7 @@ public:
 	GLfloat getZoomChange();
 	GLfloat get_rotation_speed() const { return rotation_speed; }
 	GLint get_data_update_rate() const { return data_update_rate; }
+	GLint get_coord_system() const { return coord_system; }
 };
 
 inline Window::~Window() {

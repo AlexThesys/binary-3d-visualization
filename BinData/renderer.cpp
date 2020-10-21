@@ -80,7 +80,7 @@ static int load_binary(FileData* fd, GLint mem_size, const char* fname)
     return 0;
 }
 
-void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coord_system, bool full_screen)
+void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_screen)
 {
     // window initialization
     gd->window.initialise(full_screen);
@@ -94,9 +94,6 @@ void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coord_syst
     gd->pShader.loadShaders("../shaders/p_shader.vert", "../shaders/p_shader.frag");
     gd->pShader.validateProgram();
 
-    gd->pShader.useProgram();
-    gd->pShader.setUniform("coord_system", coord_system);
-    glUseProgram(0);
 //---------------------------------------------------------------
     // cube VAO
     glGenVertexArrays(1, &gd->cVAO);
@@ -179,6 +176,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
         }
         gd->pShader.useProgram();
         gd->pShader.setUniform("VP", VP);
+        gd->pShader.setUniform("coord_system", gd->window.get_coord_system());
 
         glBindVertexArray(gd->pVAO);
         glDrawArrays(GL_POINTS, offset, fd->block_3d_size);
