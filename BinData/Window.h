@@ -21,8 +21,9 @@ private:
 	glm::vec2 lastMousePos;
 	GLfloat cam_yaw, cam_pitch, cam_radius, zoomChange;  //mouse coordinates
 	GLfloat rotation_speed = 4.0f;
-	GLint data_update_rate = 0x1000;
+	uint32_t data_update_rate = 0x1000;
 	GLint coord_system = cs_cartesian;
+	uint32_t update_data = 0xffffffff;
 	bool draw_unit_cube = true;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
@@ -42,7 +43,8 @@ public:
 	GLfloat get_cam_radius() const { return cam_radius; }
 	GLfloat getZoomChange();
 	GLfloat get_rotation_speed() const { return rotation_speed; }
-	GLint get_data_update_rate() const { return data_update_rate; }
+	uint32_t get_data_update_rate() const { return data_update_rate; }
+	uint32_t get_update_data() const { return update_data; }
 	GLint get_coord_system() const { return coord_system; }
 	bool get_draw_unit_cube() const { return draw_unit_cube; }
 };

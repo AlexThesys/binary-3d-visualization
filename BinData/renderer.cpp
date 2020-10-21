@@ -172,7 +172,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
                 offset = 0;
             }
             else {
-                offset += gd->window.get_data_update_rate();
+                offset += gd->window.get_data_update_rate() & gd->window.get_update_data();
             }
         }
         gd->pShader.useProgram();

@@ -7,6 +7,7 @@ int main(int argc, char** argv)
 	puts("Press 'z' or 'x' keys to change data update rate...");
 	puts("Press 'q', 'w' or 'e' to select cartesian, spherical or cylindrical coordinate system...");
 	puts("Press 'c' to draw unit cube wireframe...");
+	puts("Press SPACE to stop updating data blocks...");
 	if (argc < 2) {
 		puts("Provide the filename!");
 		return -1;
