@@ -23,6 +23,7 @@ private:
 	GLfloat rotation_speed = 4.0f;
 	GLint data_update_rate = 0x1000;
 	GLint coord_system = cs_cartesian;
+	bool draw_unit_cube = true;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
     static void glfw_onFrameBufferSize(GLFWwindow * window, int width, int height);
@@ -43,6 +44,7 @@ public:
 	GLfloat get_rotation_speed() const { return rotation_speed; }
 	GLint get_data_update_rate() const { return data_update_rate; }
 	GLint get_coord_system() const { return coord_system; }
+	bool get_draw_unit_cube() const { return draw_unit_cube; }
 };
 
 inline Window::~Window() {

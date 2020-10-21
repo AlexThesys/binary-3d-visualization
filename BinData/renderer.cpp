@@ -158,12 +158,13 @@ void renderGL(GraphicsData* gd, FileData* fd)
         VP = projection * view;
     
         // draw cube
-        gd->cShader.useProgram();
-        gd->cShader.setUniform("VP", VP);
+        if (gd->window.get_draw_unit_cube()) {
+            gd->cShader.useProgram();
+            gd->cShader.setUniform("VP", VP);
 
-        glBindVertexArray(gd->cVAO);
-        glDrawArrays(GL_TRIANGLES, 0, cube_num_vert);
-
+            glBindVertexArray(gd->cVAO);
+            glDrawArrays(GL_TRIANGLES, 0, cube_num_vert);
+        }
         // draw points
         if (delta >= block_update_speed) {
             last_time = current_time;

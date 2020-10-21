@@ -96,6 +96,9 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 	if (key == GLFW_KEY_E && action == GLFW_PRESS)
 		theWindow->coord_system = cs_cylindrical;
 
+	if (key == GLFW_KEY_C && action == GLFW_PRESS)
+		theWindow->draw_unit_cube = !theWindow->draw_unit_cube;
+
 	if (key >= 0 && key < 1024) {
 		if (action == GLFW_PRESS)
 			theWindow->keys[key] = true;
