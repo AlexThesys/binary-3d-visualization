@@ -78,52 +78,61 @@ int Window::initialise(bool wFullScreen) {
 
 void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int mode) {
 	Window *theWindow = static_cast<Window *>(glfwGetWindowUserPointer(window));
+	if (action == GLFW_PRESS) {
+		switch (key) {
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
+		case GLFW_KEY_A:
+			if (theWindow->rotation_speed > 2.0f)
+				theWindow->rotation_speed -= 2.0f;
+			break;
+		case GLFW_KEY_S:
+			if (theWindow->rotation_speed < 20.0f)
+				theWindow->rotation_speed += 2.0f;
+			break;
+		case GLFW_KEY_Z:
+			if (theWindow->data_update_rate > 0x100)
+				theWindow->data_update_rate >>= 1;
+			break;
+		case GLFW_KEY_X:
+			if (theWindow->data_update_rate < 0x4000)
+				theWindow->data_update_rate <<= 1;
+			break;
+		case GLFW_KEY_D:
+			if (theWindow->data_block_size > kmin_block_size)
+				theWindow->data_block_size >>= 1;
+			break;
+		case GLFW_KEY_F:
+			if (theWindow->data_block_size < kmax_block_size)
+				theWindow->data_block_size <<= 1;
+			break;
+		case GLFW_KEY_Q:
+			theWindow->coord_system = cs_cartesian;
+			break;
+		case GLFW_KEY_W:
+			theWindow->coord_system = cs_spherical;
+			break;
+		case GLFW_KEY_E:
+			theWindow->coord_system = cs_cylindrical;
+			break;
+		case GLFW_KEY_C:
+			theWindow->draw_unit_cube = !theWindow->draw_unit_cube;
+			break;
+		case GLFW_KEY_SPACE:
+			theWindow->update_data = ~theWindow->update_data;
+			break;
+		case GLFW_KEY_T:
+			theWindow->monochromatic = !theWindow->monochromatic;
+			break;
+		case GLFW_KEY_R:
+			const GLfloat x = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
+			const GLfloat y = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
+			const GLfloat z = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
+			theWindow->data_colour = { x, y, z };
+			break;
 
-	//close the window
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-
-	if (key == GLFW_KEY_A && action == GLFW_PRESS)
-		if (theWindow->rotation_speed > 2.0f)
-			theWindow->rotation_speed -= 2.0f;
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
-		if (theWindow->rotation_speed < 20.0f)
-			theWindow->rotation_speed += 2.0f;
-	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
-		if (theWindow->data_update_rate > 0x100)
-			theWindow->data_update_rate >>= 1;
-	if (key == GLFW_KEY_X && action == GLFW_PRESS)
-		if (theWindow->data_update_rate < 0x4000)
-			theWindow->data_update_rate <<= 1;
-
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-		if (theWindow->data_block_size > kmin_block_size)
-			theWindow->data_block_size >>= 1;
-	if (key == GLFW_KEY_F && action == GLFW_PRESS)
-		if (theWindow->data_block_size < kmax_block_size)
-			theWindow->data_block_size <<= 1;
-
-	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
-		theWindow->coord_system = cs_cartesian;
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-		theWindow->coord_system = cs_spherical;
-	if (key == GLFW_KEY_E && action == GLFW_PRESS)
-		theWindow->coord_system = cs_cylindrical;
-
-	if (key == GLFW_KEY_C && action == GLFW_PRESS)
-		theWindow->draw_unit_cube = !theWindow->draw_unit_cube;
-
-	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-		theWindow->update_data = ~theWindow->update_data;
-
-	if (key == GLFW_KEY_T && action == GLFW_PRESS)
-		theWindow->monochromatic = !theWindow->monochromatic;
-
-	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
-		const GLfloat x = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
-		const GLfloat y = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
-		const GLfloat z = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
-		theWindow->data_colour = { x, y, z };
+		}
 	}
 
 	if (key >= 0 && key < 1024) {
