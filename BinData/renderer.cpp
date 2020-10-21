@@ -13,7 +13,6 @@
 #define MIN(x,y) (x) < (y) ? (x) : (y)
 
 static constexpr int64_t block_update_speed = 25; // ms
-static constexpr size_t kmax_block_size = 0x100 << 12; // experimental value
 extern const char* APP_TITLE;
 
 static void showFPS(GLFWwindow* window);
@@ -50,8 +49,8 @@ static int load_binary(FileData* fd, GLint mem_size, const char* fname)
     const GLint padding = 3 - (size % 3);
     const GLint padded_size = size + padding;
     fd->data->reserve(padded_size);
-    fd->file_3d_size = padded_size / 3;
-    fd->block_3d_size = MIN(fd->file_3d_size, kmax_block_size);
+    fd->file_3d_size = (GLuint)(padded_size / 3);
+    *(fd->block_3d_size) = MIN(fd->file_3d_size, *(fd->block_3d_size));
  
     const GLint block_read = (sizeof(uint64_t) << 3);
     const GLint reads_left = size & (block_read - 1);
@@ -85,6 +84,7 @@ void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_scre
     // window initialization
     gd->window.initialise(full_screen);
     const GLint kmax_file_size = queryMemoryAvailable();
+    fd->block_3d_size = gd->window.get_block_size();
     int res = load_binary(fd, kmax_file_size, filename);
     if (res < 0) std::exit(1);
 
@@ -166,9 +166,10 @@ void renderGL(GraphicsData* gd, FileData* fd)
             glDrawArrays(GL_TRIANGLES, 0, cube_num_vert);
         }
         // draw points
+        const GLuint block_size = *(fd->block_3d_size);
         if (delta >= block_update_speed) {
             last_time = current_time;
-            if ((offset + fd->block_3d_size) >= fd->file_3d_size) {
+            if ((offset + block_size) >= fd->file_3d_size) {
                 offset = 0;
             }
             else {
@@ -180,7 +181,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
         gd->pShader.setUniform("coord_system", gd->window.get_coord_system());
 
         glBindVertexArray(gd->pVAO);
-        glDrawArrays(GL_POINTS, offset, fd->block_3d_size);
+        glDrawArrays(GL_POINTS, offset, block_size);
         
         glBindVertexArray(0);
 

@@ -24,6 +24,8 @@ private:
 	uint32_t data_update_rate = 0x1000;
 	GLint coord_system = cs_cartesian;
 	uint32_t update_data = 0xffffffff;
+	static constexpr GLuint kinit_block_size = 0x100 << 12; // experimental value
+	GLuint data_block_size = kinit_block_size;
 	bool draw_unit_cube = true;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
@@ -47,6 +49,7 @@ public:
 	uint32_t get_update_data() const { return update_data; }
 	GLint get_coord_system() const { return coord_system; }
 	bool get_draw_unit_cube() const { return draw_unit_cube; }
+	GLuint* get_block_size() { return &data_block_size; }
 };
 
 inline Window::~Window() {

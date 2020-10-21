@@ -2,6 +2,8 @@
 
 const char* APP_TITLE = "Binary 3D visualization";
 static constexpr float MOUSE_SENSITIVITY = 0.2f;
+static constexpr GLuint kmax_block_size = 0x100 << 14; // experimental value
+static constexpr GLuint kmin_block_size = 0x100 << 6; // experimental value
 
 Window::Window(GLint w, GLint h) : width(w), height(h) {
 	for (size_t i = 0; i < 1024; i++) {
@@ -88,6 +90,13 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 	if (key == GLFW_KEY_X && action == GLFW_PRESS)
 		if (theWindow->data_update_rate < 0x4000)
 			theWindow->data_update_rate <<= 1;
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+		if (theWindow->data_block_size > kmin_block_size)
+			theWindow->data_block_size >>= 1;
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+		if (theWindow->data_block_size < kmax_block_size)
+			theWindow->data_block_size <<= 1;
 
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
 		theWindow->coord_system = cs_cartesian;

@@ -20,7 +20,8 @@ struct GraphicsData
 struct FileData
 {
     std::vector<GLfloat>* data;
-    GLint file_3d_size, block_3d_size;
+    GLuint* block_3d_size;
+    GLuint file_3d_size;
 };
 
 void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_screen);
