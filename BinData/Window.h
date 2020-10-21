@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstdio>
+#include <random>
+#include <memory>
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include <glm/glm.hpp>
@@ -12,7 +14,13 @@ private:
 		cs_spherical,
 		cs_cylindrical
 	};
+	struct RandomEngine {
+		std::default_random_engine dre;
+		std::uniform_real_distribution<float> urd;
+	};
+	glm::vec3 data_colour;
 	GLFWwindow *mainWindow;
+	std::unique_ptr<RandomEngine> rnd_engine;
 	GLint width, height;
 	GLint bufferWidth, bufferHeight;
 	void createCallbacks();
@@ -50,6 +58,7 @@ public:
 	GLint get_coord_system() const { return coord_system; }
 	bool get_draw_unit_cube() const { return draw_unit_cube; }
 	GLuint* get_block_size() { return &data_block_size; }
+	const glm::vec3& get_colour() const { return data_colour; }
 };
 
 inline Window::~Window() {

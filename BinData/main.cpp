@@ -8,6 +8,7 @@ int main(int argc, char** argv)
 	puts("Press 'd' or 'f' to change data block size...");
 	puts("Press 'q', 'w' or 'e' to select cartesian, spherical or cylindrical coordinate system...");
 	puts("Press 'c' to draw unit cube wireframe...");
+	puts("Press 'r' to randomize colours...");
 	puts("Press SPACE to stop updating data blocks...");
 	puts("Press LMB + drag to rotate camera...");
 	puts("Press RMB + drag to zoom in/out...");
