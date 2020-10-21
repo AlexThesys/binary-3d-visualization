@@ -116,6 +116,9 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
 		theWindow->update_data = ~theWindow->update_data;
 
+	if (key == GLFW_KEY_T && action == GLFW_PRESS)
+		theWindow->monochromatic = !theWindow->monochromatic;
+
 	if (key == GLFW_KEY_R && action == GLFW_PRESS) {
 		const GLfloat x = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
 		const GLfloat y = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
