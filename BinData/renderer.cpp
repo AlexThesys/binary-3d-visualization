@@ -14,8 +14,11 @@
 
 static constexpr int64_t block_update_speed = 25; // ms
 static constexpr size_t kmax_block_size = 0x100 << 12; // experimental value
-static constexpr GLfloat rotation_speed = 0.008f; // maybe make configurable
+static constexpr GLfloat rotation_speed = 4.0f; // maybe make configurable
 static constexpr GLint data_update_speed = 0x1000; // bytes / block_update_speed
+extern const char* APP_TITLE;
+
+static void showFPS(GLFWwindow* window);
 
 static GLint queryMemoryAvailable()
 {
@@ -79,10 +82,10 @@ static int load_binary(FileData* fd, GLint mem_size, const char* fname)
     return 0;
 }
 
-void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coord_system)
+void initGL(GraphicsData* gd, FileData* fd, const char* filename, int coord_system, bool full_screen)
 {
     // window initialization
-    gd->window.initialise();
+    gd->window.initialise(full_screen);
     const GLint kmax_file_size = queryMemoryAvailable();
     int res = load_binary(fd, kmax_file_size, filename);
     if (res < 0) std::exit(1);
@@ -130,30 +133,34 @@ void renderGL(GraphicsData* gd, FileData* fd)
 {
     GLint offset = 0u;
 
-     glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-                (float)gd->window.getBufferWidth() / (float)gd->window.getBufferHeight(),
-                0.1f, 100.0f);
-     glm::mat4 view = glm::mat4(1.0f);
-     view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
-     glm::mat4 VP;
+     glm::mat4 VP, view, projection;
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while(!gd->window.getShouldClose())
     {
+        showFPS(gd->window.getWindow());
+
         // calculate delta time
         static std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
         std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
         std::chrono::steady_clock::duration d = current_time - last_time;
         auto delta = std::chrono::duration_cast<std::chrono::milliseconds>(d).count();
 
-        // rotate view
-        view = glm::rotate(view, (float)glfwGetTime() * glm::radians(rotation_speed), glm::vec3(0.5f, 1.0f, 0.0f));
-        VP = projection * view;
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // process input
         glfwPollEvents();
+
+        gd->camera.setLookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        gd->camera.rotate(gd->window.get_cam_yaw(), gd->window.get_cam_pitch());
+        gd->camera.setRadius(gd->window.get_cam_radius());
+        view = gd->camera.getViewMatrix();
+        // rotate view
+        view = glm::rotate(view, glm::radians((float)glfwGetTime() * rotation_speed), glm::vec3(0.5f, 1.0f, 0.0f));
+
+        projection = glm::perspective(glm::radians(45.0f),
+            (GLfloat)gd->window.getBufferWidth() / (GLfloat)gd->window.getBufferHeight(), 0.1f, 100.0f);
+        VP = projection * view;
     
         // draw cube
         gd->cShader.useProgram();
@@ -194,4 +201,36 @@ void cleanupGL(GraphicsData* gd)
     glDeleteBuffers(1, &gd->cVBO);
     gd->cShader.deleteShader();
     gd->pShader.deleteShader();
+}
+
+static void showFPS(GLFWwindow* window)
+{
+    static double previousSeconds = 0.0;
+    static int frameCount = 0;
+    double elapseSeconds;
+    double currentSeconds = glfwGetTime();
+
+    elapseSeconds = currentSeconds - previousSeconds;
+
+    //limit texxt update 4 times per second
+    if (elapseSeconds > 0.25)
+    {
+        previousSeconds = currentSeconds;
+        double fps = (double)frameCount / elapseSeconds;
+        double msPerFrame = 1000.0 / fps;
+        /*
+        std::ostringstream outs;
+        outs.precision(3);
+        outs << std::fixed << APP_TITLE << "  "
+            << "FPS: " << fps << "  "
+            << "Frame Time: " << msPerFrame << "(ms)";
+        glfwSetWindowTitle(window, outs.str().c_str());
+        */
+        char outs[128];
+        sprintf(outs, "%s\tFPS: %.3f\tFrame Time: %.3f (ms)\n", APP_TITLE, fps, msPerFrame);
+        glfwSetWindowTitle(window, outs);
+
+        frameCount = 0;
+    }
+    ++frameCount;
 }

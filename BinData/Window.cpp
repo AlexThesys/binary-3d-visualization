@@ -1,12 +1,15 @@
 #include "Window.h"
 
+const char* APP_TITLE = "Binary 3D visualization";
+static constexpr float MOUSE_SENSITIVITY = 0.2f;
+
 Window::Window(GLint w, GLint h) : width(w), height(h) {
 	for (size_t i = 0; i < 1024; i++) {
 		keys[i] = 0;
 	}
 }
 
-int Window::initialise() {
+int Window::initialise(bool wFullScreen) {
 	glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
@@ -16,11 +19,21 @@ int Window::initialise() {
 #endif // _APPLE_
 
 
-    mainWindow = glfwCreateWindow(width, height, "openglTest5", nullptr, nullptr);
-    if (mainWindow == nullptr) {
+	if (wFullScreen) {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* vMode = glfwGetVideoMode(monitor);
+		if (vMode != nullptr)
+			mainWindow = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
+	}
+	else
+	{
+		mainWindow = glfwCreateWindow(width, height, APP_TITLE, nullptr, nullptr);
+	}
+	if (mainWindow == nullptr)
+	{
 		puts("Failed to create GLFW widnow! Exiting...");
 		glfwTerminate();
-        return -1;
+		return false;
 	}
 
     glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHeight);
@@ -30,7 +43,7 @@ int Window::initialise() {
 
 	createCallbacks();
 
-	//glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(mainWindow, double(bufferWidth) / 2.0, double(bufferHeight) / 2.0);
 
 	glewExperimental = GL_TRUE;
@@ -50,6 +63,9 @@ int Window::initialise() {
 	glEnable(GL_BLEND);
 
 	glfwSetWindowUserPointer(mainWindow, this);
+
+	lastMousePos = glm::vec2(0.0f, 0.0f);
+
 	return 0;
 }
 
@@ -70,12 +86,23 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 
 void Window::handleMouse(GLFWwindow *window, double xPos, double yPos) {
 	Window *theWindow = static_cast<Window *>(glfwGetWindowUserPointer(window));
-	//current - last coordinates
-	theWindow->xChange = xPos - theWindow->lastX;
-	theWindow->yChange = theWindow->lastY - yPos;  //non-inverted controls
-	//current = last coordinates
-	theWindow->lastX = xPos;
-	theWindow->lastY = yPos;
+
+	//orbit camera
+	//change angles
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == 1)
+	{
+		theWindow->cam_yaw -= ((GLfloat)xPos - theWindow->lastMousePos.x) * MOUSE_SENSITIVITY;
+		theWindow->cam_pitch -= ((GLfloat)yPos - theWindow->lastMousePos.y) * MOUSE_SENSITIVITY;
+	}
+	//change orbit radius
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == 1)
+	{
+		float dx = 0.01f * ((GLfloat)xPos - theWindow->lastMousePos.x);
+		float dy = 0.01f * ((GLfloat)yPos - theWindow->lastMousePos.y);
+		theWindow->cam_radius += dx - dy;
+	}
+	theWindow->lastMousePos.x = (GLfloat)xPos;
+	theWindow->lastMousePos.y = (GLfloat)yPos;
 }
 
 void Window::handleScroll(GLFWwindow* window, double xoffset, double yoffset)

@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	std::unique_ptr<GraphicsData> gdata = std::make_unique<GraphicsData>();
 	std::vector<GLfloat> bin_data;
 	FileData fdata = {&bin_data, 0, 0};
-	initGL(gdata.get(), &fdata, argv[1], coord_system);
+	initGL(gdata.get(), &fdata, argv[1], coord_system, false);
 	renderGL(gdata.get(), &fdata);
 	cleanupGL(gdata.get());
 
