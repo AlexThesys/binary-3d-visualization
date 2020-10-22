@@ -1,9 +1,12 @@
+//#include <thread>
 #include "Window.h"
 
 const char* APP_TITLE = "Binary 3D visualization";
 static constexpr float MOUSE_SENSITIVITY = 0.2f;
 static constexpr GLuint kmax_block_size = 0x100 << 14; // experimental value
 static constexpr GLuint kmin_block_size = 0x100 << 6; // experimental value
+
+extern void print_help();
 
 Window::Window(GLint w, GLint h) : width(w), height(h) {
 	for (size_t i = 0; i < 1024; i++) {
@@ -84,7 +87,7 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 			glfwSetWindowShouldClose(window, GL_TRUE);
 			break;
 		case GLFW_KEY_A:
-			if (theWindow->rotation_speed > 2.0f)
+			if (theWindow->rotation_speed > 0.0f)
 				theWindow->rotation_speed -= 2.0f;
 			break;
 		case GLFW_KEY_S:
@@ -125,13 +128,17 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 		case GLFW_KEY_T:
 			theWindow->monochromatic = !theWindow->monochromatic;
 			break;
+		case GLFW_KEY_H:
+			print_help();
+			//std::thread(print_help).detach();
+			break;
 		case GLFW_KEY_R:
+			// make this the last one or initialize x,y,z upfront
 			const GLfloat x = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
 			const GLfloat y = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
 			const GLfloat z = theWindow->rnd_engine->urd(theWindow->rnd_engine->dre);
 			theWindow->data_colour = { x, y, z };
 			break;
-
 		}
 	}
 

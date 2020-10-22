@@ -1,13 +1,11 @@
 #include <memory>
 #include "renderer.h"
 
-int main(int argc, char** argv)
+void print_help()
 {
-	if (argc < 2) {
-		puts("Provide the filename!");
-		return -1;
-	}
-
+	puts("------------------------------------");
+	puts("Press 'h' to print this help...");
+	puts("Press ESC to quit...");
 	puts("Press 'a' or 's' keys to change rotation speed...");
 	puts("Press 'z' or 'x' keys to change data update rate...");
 	puts("Press 'd' or 'f' to change data block size...");
@@ -19,7 +17,15 @@ int main(int argc, char** argv)
 	puts("Press LMB + drag to rotate camera...");
 	puts("Press RMB + drag to zoom in/out...");
 	puts("------------------------------------");
+}
 
+int main(int argc, char** argv)
+{
+	if (argc < 2) {
+		puts("Provide the path to the file!");
+		return -1;
+	}
+	print_help();
 	std::unique_ptr<GraphicsData> gdata = std::make_unique<GraphicsData>();
 	std::vector<GLfloat> bin_data;
 	FileData fdata = {&bin_data, 0, 0};
