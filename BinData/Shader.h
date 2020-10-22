@@ -24,7 +24,12 @@ public:
         TESS_EVALUATION
 	};
 
-	bool loadShaders(const char* vsFilePath, const char* fsFilePath, const char* gsFilePath = nullptr);
+	bool setupShaders(const char* vsCode, const char* fsCode, const char* gsCode);
+	void loadShadersFromFile(const char* vsFilePath, const char* fsFilePath, const char* gsFilePath = nullptr);
+	void loadShadersFromString(const char* vsCode, const char* fsCode, const char* gsCode = nullptr) 
+	{
+		setupShaders(vsCode, fsCode, gsCode);
+	}
 	void useProgram();
 	GLuint getProgramID() const { return ID; }
     void validateProgram();

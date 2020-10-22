@@ -12,8 +12,15 @@
 
 #define MIN(x,y) (x) < (y) ? (x) : (y)
 
+//#define __RELEASE__
+
 static constexpr int64_t block_update_speed = 25; // ms
+
 extern const char* APP_TITLE;
+extern const char* p_vertex_shader_code;
+extern const char* p_fragment_shader_code;
+extern const char* c_vertex_shader_code;
+extern const char* c_fragment_shader_code;
 
 static void showFPS(GLFWwindow* window);
 
@@ -89,9 +96,17 @@ void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_scre
     if (res < 0) std::exit(1);
 
     // create shaders
-    gd->cShader.loadShaders("../shaders/c_shader.vert", "../shaders/c_shader.frag");
+#ifndef __RELEASE__
+    gd->cShader.loadShadersFromFile("../shaders/c_shader.vert", "../shaders/c_shader.frag");
+#else
+    gd->cShader.loadShadersFromString(c_vertex_shader_code, c_fragment_shader_code);
+#endif
     gd->cShader.validateProgram();
-    gd->pShader.loadShaders("../shaders/p_shader.vert", "../shaders/p_shader.frag");
+#ifndef __RELEASE__
+    gd->pShader.loadShadersFromFile("../shaders/p_shader.vert", "../shaders/p_shader.frag");
+#else
+    gd->cShader.loadShadersFromString(p_vertex_shader_code, p_fragment_shader_code);
+#endif
     gd->pShader.validateProgram();
 
 //---------------------------------------------------------------
