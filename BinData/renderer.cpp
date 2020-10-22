@@ -12,7 +12,7 @@
 
 #define MIN(x,y) (x) < (y) ? (x) : (y)
 
-//#define __RELEASE__
+#define __RELEASE__
 
 static constexpr int64_t block_update_speed = 25; // ms
 
@@ -105,7 +105,7 @@ void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_scre
 #ifndef __RELEASE__
     gd->pShader.loadShadersFromFile("../shaders/p_shader.vert", "../shaders/p_shader.frag");
 #else
-    gd->cShader.loadShadersFromString(p_vertex_shader_code, p_fragment_shader_code);
+    gd->pShader.loadShadersFromString(p_vertex_shader_code, p_fragment_shader_code);
 #endif
     gd->pShader.validateProgram();
 

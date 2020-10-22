@@ -3,6 +3,11 @@
 
 int main(int argc, char** argv)
 {
+	if (argc < 2) {
+		puts("Provide the filename!");
+		return -1;
+	}
+
 	puts("Press 'a' or 's' keys to change rotation speed...");
 	puts("Press 'z' or 'x' keys to change data update rate...");
 	puts("Press 'd' or 'f' to change data block size...");
@@ -14,11 +19,7 @@ int main(int argc, char** argv)
 	puts("Press LMB + drag to rotate camera...");
 	puts("Press RMB + drag to zoom in/out...");
 	puts("------------------------------------");
-	
-	if (argc < 2) {
-		puts("Provide the filename!");
-		return -1;
-	}
+
 	std::unique_ptr<GraphicsData> gdata = std::make_unique<GraphicsData>();
 	std::vector<GLfloat> bin_data;
 	FileData fdata = {&bin_data, 0, 0};
