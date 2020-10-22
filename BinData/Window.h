@@ -14,6 +14,12 @@ private:
 		cs_spherical,
 		cs_cylindrical
 	};
+	enum colour_scheme {
+		csc_HYPER = 0,
+		csc_MONO,
+		csc_LOG2,
+		csc_NUM_SCHEMES
+	};
 	struct RandomEngine {
 		std::default_random_engine dre;
 		std::uniform_real_distribution<float> urd;
@@ -35,7 +41,7 @@ private:
 	static constexpr GLuint kinit_block_size = 0x100 << 12; // experimental value
 	GLuint data_block_size = kinit_block_size;
 	bool draw_unit_cube = true;
-	bool monochromatic = false;
+	GLint colour_scheme = csc_HYPER;
 	static void handleMouse(GLFWwindow *window, double xPos, double yPos);
 	static void handleScroll(GLFWwindow* window, double xoffset, double yoffset);
     static void glfw_onFrameBufferSize(GLFWwindow * window, int width, int height);
@@ -60,7 +66,7 @@ public:
 	bool get_draw_unit_cube() const { return draw_unit_cube; }
 	GLuint* get_block_size() { return &data_block_size; }
 	const glm::vec3& get_colour() const { return data_colour; }
-	bool get_monochromatic() const { return monochromatic; }
+	GLint get_colour_scheme() const { return colour_scheme; }
 };
 
 inline Window::~Window() {

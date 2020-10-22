@@ -195,7 +195,7 @@ void renderGL(GraphicsData* gd, FileData* fd)
         gd->pShader.setUniform("VP", VP);
         gd->pShader.setUniform("coord_system", gd->window.get_coord_system());
         gd->pShader.setUniform("colour", gd->window.get_colour());
-        gd->pShader.setUniform("monochromatic", gd->window.get_monochromatic());
+        gd->pShader.setUniform("colour_scheme", gd->window.get_colour_scheme());
 
         glBindVertexArray(gd->pVAO);
         glDrawArrays(GL_POINTS, offset, block_size);

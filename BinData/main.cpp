@@ -12,7 +12,7 @@ void print_help()
 	puts("Press 'q', 'w' or 'e' to select cartesian, spherical or cylindrical coordinate system...");
 	puts("Press 'c' to draw unit cube wireframe...");
 	puts("Press 'r' to randomize colours...");
-	puts("Press 't' to toggle monochromatic colourscheme...");
+	puts("Press 't' to toggle colour scheme...");
 	puts("Press SPACE to stop updating data blocks...");
 	puts("Press LMB + drag to rotate camera...");
 	puts("Press RMB + drag to zoom in/out...");

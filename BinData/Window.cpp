@@ -126,7 +126,7 @@ void Window::handleKeys(GLFWwindow *window, int key, int code, int action, int m
 			theWindow->update_data = ~theWindow->update_data;
 			break;
 		case GLFW_KEY_T:
-			theWindow->monochromatic = !theWindow->monochromatic;
+			theWindow->colour_scheme = ++(theWindow->colour_scheme) % csc_NUM_SCHEMES;
 			break;
 		case GLFW_KEY_H:
 			print_help();
