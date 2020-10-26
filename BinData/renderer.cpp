@@ -86,10 +86,10 @@ static int load_binary(FileData* fd, GLint mem_size, const char* fname)
     return 0;
 }
 
-void initGL(GraphicsData* gd, FileData* fd, const char* filename, bool full_screen)
+void initGL(GraphicsData* gd, FileData* fd, UpdateData* upd, const char* filename, bool full_screen)
 {
     // window initialization
-    gd->window.initialise(full_screen);
+    gd->window.initialise(upd, full_screen);
     const GLint kmax_file_size = queryMemoryAvailable();
     fd->block_3d_size = gd->window.get_block_size();
     int res = load_binary(fd, kmax_file_size, filename);
