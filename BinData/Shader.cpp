@@ -104,7 +104,7 @@ void Shader::checkCompileErrors(GLuint shader) const
     {
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
         std::string errorLog(static_cast<unsigned long>(length), ' ');
-        glGetShaderInfoLog(ID, length, &length, &errorLog[0]);
+        glGetShaderInfoLog(shader, length, &length, &errorLog[0]);
         std::cerr << "Error compiling shader.\n" << errorLog << std::endl;
     }
 }
